@@ -27,11 +27,9 @@ def player(board):
     os = 0
     emptys = 0
 
-    # Initiate the board
-    board_state = board()
 
     # Loop through each line, and each mark
-    for line in board_state:
+    for line in board:
         for m in line:
             if m == X:
                 xs += 1
@@ -55,10 +53,9 @@ def actions(board):
 
     # Create state and initiate board
     actions = set()
-    board_state = board()
 
     # Loop with enumearte through board, if 'EMPTY' add to actions
-    for i, j in enumerate(board_state):
+    for i, j in enumerate(board):
         for k, l in enumerate(j):
             if l == EMPTY:
                 actions.add((i, k))
@@ -76,16 +73,15 @@ def result(board, action):
     else:
         # Deepcopy of the board
         c_board = copy.deepcopy(board)
-        c_board_state = c_board()
         
         # Get action indexes
         (i, j) = action
 
         # Get the mark and set on the board
         mark = player(board)
-        c_board_state[i][j] = mark
+        c_board[i][j] = mark
 
-        return c_board_state
+        return c_board
         
 
 def winner(board):
@@ -93,23 +89,22 @@ def winner(board):
     Returns the winner of the game, if there is one.
     """
 
-    board_state = board()
 
     # Check rows
-    for row in board_state:
+    for row in board:
         if row[0] == row[1] == row[2] != EMPTY:
             return row[0]
         
     # Check columns
     for column in range(3):
-        if board_state[0][column] == board_state[1][column] == board_state[2][column] != EMPTY:
-            return board_state[0][column]
+        if board[0][column] == board[1][column] == board[2][column] != EMPTY:
+            return board[0][column]
         
     # Check diagonals
-    if board_state[0][0] == board_state[1][1] == board_state[2][2] != EMPTY:
-        return board_state[0][0]
-    if board_state[0][2] == board_state[1][1] == board_state[2][0] != EMPTY:
-        return board_state[0][2]
+    if board[0][0] == board[1][1] == board[2][2] != EMPTY:
+        return board[0][0]
+    if board[0][2] == board[1][1] == board[2][0] != EMPTY:
+        return board[0][2]
     
     # If no winner
     return None
@@ -120,7 +115,6 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-
     if len(actions(board)) == 0 or winner(board) == X or winner(board) == O:
         return True
     else:
@@ -138,10 +132,16 @@ def utility(board):
             return -1
         else:
             return 0
+    else:
+        return None
     
 
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board) == True:
+        return None
+    else:
+        
+
