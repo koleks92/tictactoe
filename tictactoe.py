@@ -178,8 +178,11 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
     depth = len(actions(board))
+
+    # Minimizing player, because O is always second
     if player(board) == O:
         v, move = min_value(board, depth)
+    # Maximizing player, because X is always start
     if player(board) == X:
         v, move = max_value(board, depth)
     
