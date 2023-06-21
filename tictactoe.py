@@ -136,12 +136,52 @@ def utility(board):
         return None
     
 
+def max_value(board, depth):
+    # If terminal, return result
+    if depth == 0 or terminal(board):
+        return utility(board), None
+    
+    # Set v_max
+    v_max = -math.inf
+    action = None
+
+    for a in actions(board):
+        v, _ = min_value(result(board, a), depth -1)
+        # If value bigger than v_max, set action(move) to a
+        if v > v_max:
+            v_max = v
+            action = a
+    
+    return v_max, action
+
+def min_value(board, depth):
+    # If terminal, return result
+    if depth == 0 or terminal(board):
+        return utility(board), None
+    
+    # Set v_min
+    v_min = math.inf
+    action = None
+
+    for a in actions(board):
+        v, _ = max_value(result(board, a), depth - 1)
+
+        # If value smaller than v_min, set action(move) to a
+        if v < v_min:
+            v_min = v
+            action = a
+            
+    return v_min, action
+
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    if terminal(board) == True:
-        return None
-    else:
-        
+    depth = len(actions(board))
+    if player(board) == O:
+        v, move = min_value(board, depth)
+    if player(board) == X:
+        v, move = max_value(board, depth)
+    
 
+    return move
